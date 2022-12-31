@@ -15,7 +15,7 @@ export class ToppingsService {
 
   getToppings(): Observable<Topping[]> {
     return this.http
-      .get<Topping[]>(this.serverName + `/api/toppings`);
+      .get<Topping[]>(this.serverName + `/toppings`);
      // .pipe(catchError((error: any) => Observable.throw(error.json())));
   }
 }

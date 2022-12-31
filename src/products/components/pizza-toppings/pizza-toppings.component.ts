@@ -52,6 +52,8 @@ export class PizzaToppingsComponent implements ControlValueAccessor {
   }
 
   selectTopping(topping: Topping) {
+    //alert(123);
+    //console.log(topping);
     if (this.existsInToppings(topping)) {
       this.value = this.value.filter(item => item.id !== topping.id);
     } else {
