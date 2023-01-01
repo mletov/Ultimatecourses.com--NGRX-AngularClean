@@ -19,27 +19,34 @@ const PIZZA_TOPPINGS_ACCESSOR = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['pizza-toppings.component.scss'],
   template: `
+
     <div class="pizza-toppings">
       <div 
         class="pizza-toppings-item"
         *ngFor="let topping of toppings;"
         (click)="selectTopping(topping)"
         [class.active]="existsInToppings(topping)">
-        <img src="/assets/img/toppings/singles/{{ topping.name }}.svg">
-        {{ topping.name }}
+
+        <ng-container *ngIf="topping && topping.name">
+          {{ topping.name }}
+          <img src="/assets/img/toppings/singles/{{ topping.name }}.svg">
+          {{ topping.name }}
+        </ng-container>
+
       </div>
     </div>
+
   `,
 })
 export class PizzaToppingsComponent implements ControlValueAccessor {
-  @Input() toppings: Topping[] = [];
+  @Input() public toppings: Topping[] = [];
 
   value: Topping[] = [];
 
   private onTouch: Function = () => {};
   private onModelChange: Function = () => {};
 
-  registerOnChange(fn: Function) {
+  registerOnChange(fn: Function) {    
     this.onModelChange = fn;
   }
 
@@ -59,6 +66,10 @@ export class PizzaToppingsComponent implements ControlValueAccessor {
     } else {
       this.value = [...this.value, topping];
     }
+
+   // console.log(this.toppings);
+   // console.log(this.value);
+
     this.onTouch();
     this.onModelChange(this.value);
   }

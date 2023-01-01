@@ -69,15 +69,20 @@ export class ProductItemComponent implements OnInit {
       toppings = this.pizza.toppings ?? [];
     }
     this.visualise = { ...this.pizza, toppings};
+
+   // console.log(this.pizza);
+    //console.log(this.visualise);
   }
 
   onCreate(event: Pizza) {
+    console.log("onCreate");
     this.pizzaService.createPizza(event).subscribe(pizza => {
       this.router.navigate([`/products/${pizza.id}`]);
     });
   }
 
   onUpdate(event: Pizza) {
+    console.log("onUpdate");
     this.pizzaService.updatePizza(event).subscribe(() => {
       this.router.navigate([`/products`]);
     });
