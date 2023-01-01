@@ -49,9 +49,11 @@ import { Topping } from '../../models/topping.model';
         </label>
         <div class="pizza-form__list">
 
+
+           
           <pizza-toppings
             [toppings]="toppings"
-            formControlName="toppings">
+            formArrayName="toppings">
           </pizza-toppings>
 
         </div>
@@ -99,7 +101,9 @@ export class PizzaFormComponent implements OnChanges {
 
   form = this.fb.group({
     name: ['', Validators.required],
+    //toppings:  new FormArray([])
     toppings: this.fb.array([]) ,
+    //toppings: [[]]
   });
 
   constructor(private fb: FormBuilder) {}
@@ -115,9 +119,10 @@ export class PizzaFormComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (this.pizza && this.pizza.id) {
       this.exists = true;
+     // console.log(this.pizza);
       this.form.patchValue(this.pizza);
     }
-
+    
     this.form
       .get('toppings')!
       .valueChanges!
