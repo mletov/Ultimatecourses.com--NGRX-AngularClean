@@ -1,3 +1,28 @@
+//https://indepth.dev/posts/1055/never-again-be-confused-when-implementing-controlvalueaccessor-in-angular-forms
+
+/*
+import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
+
+@Component({
+  selector: 'pizza-form',
+  template: `
+      <span>Current slider value: {{ctrl.value}}</span>
+      <ngx-jquery-slider [formControl]="ctrl"></ngx-jquery-slider>
+      <input [value]="ctrl.value" (change)="updateSlider($event)">
+  `
+})
+export class PizzaFormComponent {
+  ctrl = new FormControl(11);
+
+  updateSlider($event: any) {
+  //  console.log($event.currentTarget.value);
+    this.ctrl.setValue($event.currentTarget.value, {emitModelToViewChange: true});
+    
+  }
+}*/
+
+
 import {
   Component,
   Input,
@@ -29,6 +54,8 @@ import { Topping } from '../../models/topping.model';
       
         <label>
           <h4>Pizza name</h4>
+
+  
           <input 
             type="text" 
             formControlName="name"
@@ -41,19 +68,21 @@ import { Topping } from '../../models/topping.model';
             <p>Pizza must have a name</p>
           </div>
         </label>
-      
+
+   
+
         <ng-content></ng-content>
 
         <label>
           <h4>Select toppings</h4>
         </label>
+
         <div class="pizza-form__list">
+              
 
-
-           
-          <pizza-toppings
+           <pizza-toppings
             [toppings]="toppings"
-            formArrayName="toppings">
+            [formControl]="toppingsControl">
           </pizza-toppings>
 
         </div>
@@ -89,6 +118,7 @@ import { Topping } from '../../models/topping.model';
   `,
 })
 export class PizzaFormComponent implements OnChanges {
+
   exists = false;
 
   @Input() pizza: Pizza = {};
@@ -99,14 +129,34 @@ export class PizzaFormComponent implements OnChanges {
   @Output() update = new EventEmitter<Pizza>();
   @Output() remove = new EventEmitter<Pizza>();
 
+
+
   form = this.fb.group({
     name: ['', Validators.required],
+    //toppings: []
     //toppings:  new FormArray([])
-    toppings: this.fb.array([]) ,
+    //toppings: this.fb.array([]) ,
     //toppings: [[]]
+    //sliders: this.fb.array([]) 
+    //sliders: new FormControl(),
+    toppings: new FormControl()
   });
 
   constructor(private fb: FormBuilder) {}
+
+  //trl = new FormControl(11);
+  /*
+  get slidersControl() {
+    //console.log(this.form.get('sliders'));
+    return this.form.get('sliders') as FormControl;
+  }*/
+
+  get toppingsControl() {
+    //console.log(this.form.get('toppings'));
+    return this.form.get('toppings') as FormControl;
+  }
+
+
 
   get nameControl() {
     return this.form.get('name') as FormControl;
@@ -117,19 +167,35 @@ export class PizzaFormComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    //console.log("this.pizza", this.pizza);
     if (this.pizza && this.pizza.id) {
-      this.exists = true;
-     // console.log(this.pizza);
+      
+      this.exists = true;      
       this.form.patchValue(this.pizza);
     }
+
+    this.toppingsControl
+    .valueChanges
+    .pipe(
+      map((toppings: any) => { 
+       // console.log("CHANGED", toppings);
+        return (toppings ?? []) .map((topping: Topping) => topping.id);      
+      })
+    )
+    .subscribe((value) => {
+     // console.log("EMITED", value);
+      this.selected.emit(value)
+    });;
+
     
+    /*
     this.form
       .get('toppings')!
       .valueChanges!
       .pipe(
         map((toppings: any) => toppings.map((topping: Topping) => topping.id))
       )
-      .subscribe(value => this.selected.emit(value));
+      .subscribe(value => this.selected.emit(value));*/
   }
 
   createPizza(form: FormGroup) {

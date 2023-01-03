@@ -62,27 +62,27 @@ export class ProductItemComponent implements OnInit {
     let toppings: Topping[] = [];
 
     if (this.toppings && this.toppings.length) {
+      /*
       toppings = [event.map(id =>
         this.toppings.find(topping => topping.id === id)
-      )];
+      )];*/
+      toppings = this.toppings.filter(t => event.includes(t.id ?? 0));
     } else {
       toppings = this.pizza.toppings ?? [];
     }
+    
     this.visualise = { ...this.pizza, toppings};
-
-   // console.log(this.pizza);
-    //console.log(this.visualise);
   }
 
   onCreate(event: Pizza) {
-    console.log("onCreate");
+    //console.log("onCreate");
     this.pizzaService.createPizza(event).subscribe(pizza => {
       this.router.navigate([`/products/${pizza.id}`]);
     });
   }
 
   onUpdate(event: Pizza) {
-    console.log("onUpdate");
+   // console.log("onUpdate");
     this.pizzaService.updatePizza(event).subscribe(() => {
       this.router.navigate([`/products`]);
     });
