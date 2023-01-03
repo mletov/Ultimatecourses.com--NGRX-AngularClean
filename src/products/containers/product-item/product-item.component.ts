@@ -88,6 +88,8 @@ export class ProductItemComponent implements OnInit {
     console.log("onCreate");
     this.pizzaService.createPizza(event).subscribe(pizza => {
       this.router.navigate([`/products/${pizza.id}`]);
+
+      this.ngOnInit();
     });
   }
 

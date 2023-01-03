@@ -28,6 +28,7 @@ import {
   Input,
   Output,
   EventEmitter,
+  OnInit,
   OnChanges,
   SimpleChanges,
   ChangeDetectionStrategy,
@@ -167,9 +168,9 @@ export class PizzaFormComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    //console.log("this.pizza", this.pizza);
+    //console.log("ngOnChanges");
+    console.log("ngOnChanges", this.pizza);
     if (this.pizza && this.pizza.id) {
-      
       this.exists = true;      
       this.form.patchValue(this.pizza);
     }
