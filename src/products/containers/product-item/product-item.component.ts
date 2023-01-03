@@ -49,17 +49,26 @@ export class ProductItemComponent implements OnInit {
         pizza = pizzas.find(pizza => pizza.id == parseInt(param, 10)) as Pizza;
       }
       this.pizza = pizza;
-      this.toppingsService.getToppings().subscribe(toppings => {
-        this.toppings = toppings;
-        const ids = toppings.map(topping => topping.id) as number[];
-        this.onSelect(ids);
-      });
+
+    //  if (param !== 'new') {
+        
+        this.toppingsService.getToppings().subscribe(toppings => {
+          this.toppings = toppings;
+          const ids = toppings.map(topping => topping.id) as number[];
+          if (param !== 'new')
+            this.onSelect(ids);
+          else 
+            this.onSelect([]);
+        });
+      //}
+      //else 
+      // this.onSelect([]);
     });
   }
 
   onSelect(event: number[]) {
     
-    let toppings: Topping[] = [];
+    let toppings: Topping[];
 
     if (this.toppings && this.toppings.length) {
       /*
@@ -67,6 +76,7 @@ export class ProductItemComponent implements OnInit {
         this.toppings.find(topping => topping.id === id)
       )];*/
       toppings = this.toppings.filter(t => event.includes(t.id ?? 0));
+      //console.log(event);
     } else {
       toppings = this.pizza.toppings ?? [];
     }
@@ -75,14 +85,14 @@ export class ProductItemComponent implements OnInit {
   }
 
   onCreate(event: Pizza) {
-    //console.log("onCreate");
+    console.log("onCreate");
     this.pizzaService.createPizza(event).subscribe(pizza => {
       this.router.navigate([`/products/${pizza.id}`]);
     });
   }
 
   onUpdate(event: Pizza) {
-   // console.log("onUpdate");
+//    console.log("onUpdate");
     this.pizzaService.updatePizza(event).subscribe(() => {
       this.router.navigate([`/products`]);
     });

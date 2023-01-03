@@ -199,6 +199,7 @@ export class PizzaFormComponent implements OnChanges {
   }
 
   createPizza(form: FormGroup) {
+    console.log("createPizza");
     const { value, valid } = form;
     if (valid) {
       this.create.emit(value);
